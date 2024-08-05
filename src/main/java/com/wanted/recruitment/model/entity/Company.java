@@ -37,7 +37,7 @@ public class Company {
     @Column(columnDefinition = "varchar NOT NULL COMMENT '지역'")
     private String city;
 
-    @OneToMany(mappedBy = "companyId")
+    @OneToMany(mappedBy = "company")
     private List<Job> jobs;
 
     @CreatedDate

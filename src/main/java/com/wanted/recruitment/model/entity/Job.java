@@ -28,12 +28,9 @@ public class Job {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "company_id")
-//    private Company company;
-
-    @Column(columnDefinition = "bigint NOT NULL COMMENT '회사 ID'")
-    private Long companyId;
+    @ManyToOne
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @Column(columnDefinition = "varchar NOT NULL COMMENT '포지션'")
     private String position;
