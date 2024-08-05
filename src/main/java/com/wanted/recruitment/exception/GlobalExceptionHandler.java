@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> errorHandler(RecruitmentApplicationException e) {
         log.error("Error occurs {}", e.toString());
         return ResponseEntity.status(e.getErrorCode().getStatus())
-                .body(BaseResponse.error(e.getErrorCode().name()));
+                .body(BaseResponse.error(e.getErrorCode().name(), e.getMessage()));
     }
 
 }

@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
     SYSTEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected system error occurred."),
-    Job_NOT_FOUND(HttpStatus.NOT_FOUND, "The job with the specified ID does not exist."),
+    JOB_NOT_FOUND(HttpStatus.NOT_FOUND, "The job with the specified ID does not exist."),
+    COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "The company with the specified ID does not exist."),
     ;
 
     private final HttpStatus status;

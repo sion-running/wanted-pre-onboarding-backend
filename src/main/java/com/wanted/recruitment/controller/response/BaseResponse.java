@@ -21,6 +21,10 @@ public class BaseResponse<T> {
         return new BaseResponse<Void>(resultCode, null);
     }
 
+    public static BaseResponse<String> error(String resultCode, String message) {
+        return new BaseResponse<String>(resultCode, message);
+    }
+
     public String toStream() {
         if (result == null) {
             return "{" +
