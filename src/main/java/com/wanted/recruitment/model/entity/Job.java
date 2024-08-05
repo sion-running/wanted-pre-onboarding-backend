@@ -1,5 +1,6 @@
 package com.wanted.recruitment.model.entity;
 
+import com.wanted.recruitment.controller.request.JobCreateRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,4 +55,21 @@ public class Job {
 
     @Column(columnDefinition = "datetime default NULL COMMENT '삭제일자'")
     private LocalDateTime deletedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.createdAt == null) {
+            this.createdAt = LocalDateTime.now();
+        }
+    }
+
+    public static Job fromRequest(JobCreateRequest request, Company company) {
+        return Job.builder()
+                .company(company)
+                .position(request.getPosition())
+                .reward(request.getReward())
+                .description(request.getDescription())
+                .skills(request.getSkills())
+                .build();
+    }
 }

@@ -1,5 +1,6 @@
 package com.wanted.recruitment.controller;
 
+import com.wanted.recruitment.controller.request.JobCreateRequest;
 import com.wanted.recruitment.controller.response.BaseResponse;
 import com.wanted.recruitment.controller.response.JobDetailResponse;
 import com.wanted.recruitment.controller.response.JobResponse;
@@ -14,6 +15,12 @@ import java.util.List;
 @RequestMapping("/job")
 public class JobController {
     private final JobService jobService;
+
+    @PostMapping
+    public BaseResponse<JobResponse> create(@RequestBody JobCreateRequest request) {
+        JobResponse jobResponse = jobService.create(request);
+        return BaseResponse.success(jobResponse);
+    }
 
     @GetMapping
     public BaseResponse<List<JobResponse>> getJobList() {
