@@ -1,9 +1,11 @@
 package com.wanted.recruitment.service;
 
 import com.wanted.recruitment.controller.request.JobCreateRequest;
+import com.wanted.recruitment.controller.request.JobSearchRequest;
 import com.wanted.recruitment.controller.request.JobUpdateRequest;
 import com.wanted.recruitment.exception.ErrorCode;
 import com.wanted.recruitment.exception.RecruitmentApplicationException;
+import com.wanted.recruitment.model.SearchType;
 import com.wanted.recruitment.model.entity.Company;
 import com.wanted.recruitment.model.entity.Job;
 import com.wanted.recruitment.repository.CompanyRepository;
@@ -102,6 +104,25 @@ class JobServiceTest {
                 jobService.delete(requestJobId));
 
         Assertions.assertEquals(ErrorCode.JOB_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
+    void 채용공고_검색시_입력받은_키워드가_없으면_예외를_발생시킨다() {
+        // given
+        SearchType searchType = SearchType.POSITION;
+        String emptyKeyword = "";
+
+        JobSearchRequest request = JobSearchRequest.builder()
+                .searchType(searchType)
+                .keyword(emptyKeyword)
+                .build();
+
+        // when
+        // then
+        RecruitmentApplicationException exception = assertThrows(RecruitmentApplicationException.class, () ->
+                jobService.search(request));
+
+        Assertions.assertEquals(ErrorCode.NO_SEARCH_KEYWORD, exception.getErrorCode());
     }
 
 }
