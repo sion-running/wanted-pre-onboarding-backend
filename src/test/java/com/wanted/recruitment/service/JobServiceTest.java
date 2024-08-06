@@ -35,6 +35,23 @@ class JobServiceTest {
     CompanyRepository companyRepository;
 
     @Test
+    void 채용공고_생성시_존재하지_않는_회사일_경우_예외를_발생시킨다() {
+        // given
+        JobCreateRequest request = JobCreateRequest.builder()
+                .companyId(100L)
+                .build();
+
+        // when
+        when(companyRepository.findById(request.getCompanyId())).thenReturn(Optional.empty());
+
+        // then
+        RecruitmentApplicationException exception = assertThrows(RecruitmentApplicationException.class, () ->
+                jobService.create(request));
+
+        Assertions.assertEquals(ErrorCode.COMPANY_NOT_FOUND, exception.getErrorCode());
+    }
+
+    @Test
     void 채용공고_수정시_유효하지_않은_채용공고면_예외를_발생시킨다() {
         // given
         JobUpdateRequest request = JobUpdateRequest.builder()
