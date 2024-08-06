@@ -1,6 +1,7 @@
 package com.wanted.recruitment.controller;
 
 import com.wanted.recruitment.controller.request.JobCreateRequest;
+import com.wanted.recruitment.controller.request.JobSearchRequest;
 import com.wanted.recruitment.controller.request.JobUpdateRequest;
 import com.wanted.recruitment.controller.response.BaseResponse;
 import com.wanted.recruitment.controller.response.JobDetailResponse;
@@ -43,5 +44,11 @@ public class JobController {
     @GetMapping("/{jobId}")
     public BaseResponse<JobDetailResponse> getJobDetail(@PathVariable("jobId") Long jobId) {
         return BaseResponse.success(jobService.getJobDetail(jobId));
+    }
+
+    @GetMapping("/search")
+    public BaseResponse<List<JobResponse>> searchJobList(@RequestBody JobSearchRequest searchRequest) {
+        List<JobResponse> list = jobService.search(searchRequest);
+        return BaseResponse.success(list);
     }
 }

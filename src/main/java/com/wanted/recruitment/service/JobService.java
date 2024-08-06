@@ -1,11 +1,13 @@
 package com.wanted.recruitment.service;
 
 import com.wanted.recruitment.controller.request.JobCreateRequest;
+import com.wanted.recruitment.controller.request.JobSearchRequest;
 import com.wanted.recruitment.controller.request.JobUpdateRequest;
 import com.wanted.recruitment.controller.response.JobDetailResponse;
 import com.wanted.recruitment.controller.response.JobResponse;
 import com.wanted.recruitment.exception.ErrorCode;
 import com.wanted.recruitment.exception.RecruitmentApplicationException;
+import com.wanted.recruitment.model.SearchType;
 import com.wanted.recruitment.model.entity.Company;
 import com.wanted.recruitment.model.entity.Job;
 import com.wanted.recruitment.repository.CompanyRepository;
@@ -14,8 +16,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,4 +75,33 @@ public class JobService {
         Job job = jobRepository.findByIdWithCompany(jobId);
         return JobDetailResponse.fromJob(job);
     }
+
+    @Transactional(readOnly = true)
+    public List<JobResponse> search(JobSearchRequest searchRequest) {
+        SearchType searchType = searchRequest.getSearchType();
+        String keyword = searchRequest.getKeyword();
+        List<JobResponse> list = new ArrayList<>();
+
+        if (isNullOrEmpty(keyword)) {
+            return getJobList();
+        }
+
+        switch (searchType) {
+            case COMPANY_NAME:
+                return jobRepository.findByCompanyNameLike(keyword).stream().map(JobResponse::fromJob).collect(Collectors.toList());
+            case POSITION:
+                return jobRepository.findByPositionLike(keyword).stream().map(JobResponse::fromJob).collect(Collectors.toList());
+            case SKILLS:
+                return jobRepository.findBySkillsLike(keyword).stream().map(JobResponse::fromJob).collect(Collectors.toList());
+            default:
+                throw new RecruitmentApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+    }
+
+    private boolean isNullOrEmpty(String str) {
+        return Optional.ofNullable(str)
+                .filter(s -> !s.isEmpty())
+                .isEmpty();
+    }
+
 }
