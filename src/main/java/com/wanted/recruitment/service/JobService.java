@@ -1,6 +1,7 @@
 package com.wanted.recruitment.service;
 
 import com.wanted.recruitment.controller.request.JobCreateRequest;
+import com.wanted.recruitment.controller.request.JobUpdateRequest;
 import com.wanted.recruitment.controller.response.JobDetailResponse;
 import com.wanted.recruitment.controller.response.JobResponse;
 import com.wanted.recruitment.exception.ErrorCode;
@@ -30,6 +31,25 @@ public class JobService {
         Job job = Job.fromRequest(request, company);
         return JobResponse.fromJob(jobRepository.save(job));
     }
+
+    public void update(JobUpdateRequest request) {
+        Job existingJob = jobRepository.findById(request.getJobId()).orElseThrow(() -> {
+            throw new RecruitmentApplicationException(ErrorCode.JOB_NOT_FOUND, request.getJobId());
+        });
+
+        if (request.getCompanyId() != existingJob.getCompany().getId()) {
+            throw new RecruitmentApplicationException(ErrorCode.INVALID_REQUEST, request.getJobId());
+        }
+
+        existingJob.setPosition(request.getPosition());
+        existingJob.setReward(request.getReward());
+        existingJob.setDescription(request.getDescription());
+        existingJob.setSkills(request.getSkills());
+
+        jobRepository.save(existingJob);
+    }
+
+
 
     public List<JobResponse> getJobList() {
         return jobRepository.findAllWithCompany().stream().map(JobResponse::fromJob).collect(Collectors.toList());

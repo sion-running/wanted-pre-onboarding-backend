@@ -11,6 +11,7 @@ public enum ErrorCode {
     SYSTEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected system error occurred."),
     JOB_NOT_FOUND(HttpStatus.NOT_FOUND, "The job with the specified ID does not exist."),
     COMPANY_NOT_FOUND(HttpStatus.NOT_FOUND, "The company with the specified ID does not exist."),
+    INVALID_REQUEST(HttpStatus.BAD_REQUEST, "Invalid request."),
     ;
 
     private final HttpStatus status;

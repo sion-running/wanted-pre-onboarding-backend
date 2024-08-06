@@ -1,6 +1,7 @@
 package com.wanted.recruitment.controller;
 
 import com.wanted.recruitment.controller.request.JobCreateRequest;
+import com.wanted.recruitment.controller.request.JobUpdateRequest;
 import com.wanted.recruitment.controller.response.BaseResponse;
 import com.wanted.recruitment.controller.response.JobDetailResponse;
 import com.wanted.recruitment.controller.response.JobResponse;
@@ -20,6 +21,12 @@ public class JobController {
     public BaseResponse<JobResponse> create(@RequestBody JobCreateRequest request) {
         JobResponse jobResponse = jobService.create(request);
         return BaseResponse.success(jobResponse);
+    }
+
+    @PutMapping
+    public BaseResponse<Void> update(@RequestBody JobUpdateRequest request) {
+        jobService.update(request);
+        return BaseResponse.success();
     }
 
     @GetMapping

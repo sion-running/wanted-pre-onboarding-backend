@@ -63,6 +63,13 @@ public class Job {
         }
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        if (this.updatedAt == null) {
+            this.updatedAt = LocalDateTime.now();
+        }
+    }
+
     public static Job fromRequest(JobCreateRequest request, Company company) {
         return Job.builder()
                 .company(company)
