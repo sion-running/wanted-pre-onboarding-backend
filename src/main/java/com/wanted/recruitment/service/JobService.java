@@ -83,7 +83,7 @@ public class JobService {
         List<JobResponse> list = new ArrayList<>();
 
         if (isNullOrEmpty(keyword)) {
-            return getJobList();
+            throw new RecruitmentApplicationException(ErrorCode.NO_SEARCH_KEYWORD);
         }
 
         switch (searchType) {
