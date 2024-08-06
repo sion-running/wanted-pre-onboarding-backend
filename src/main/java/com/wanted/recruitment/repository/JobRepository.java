@@ -16,12 +16,12 @@ public interface JobRepository extends JpaRepository<Job, Long> {
     @Query("SELECT j FROM Job j JOIN FETCH j.company WHERE j.id = :id")
     Job findByIdWithCompany(@Param("id") Long id);
 
-    @Query("SELECT j FROM Job j WHERE j.company.name LIKE %:companyName%")
+    @Query("SELECT j FROM Job j JOIN FETCH j.company WHERE j.company.name LIKE %:companyName%")
     List<Job> findByCompanyNameLike(@Param("companyName") String companyName);
 
-    @Query("SELECT j FROM Job j WHERE j.position LIKE %:position%")
+    @Query("SELECT j FROM Job j JOIN FETCH j.company WHERE j.position LIKE %:position%")
     List<Job> findByPositionLike(@Param("position") String position);
 
-    @Query("SELECT j FROM Job j WHERE j.skills LIKE %:skills%")
+    @Query("SELECT j FROM Job j JOIN FETCH j.company WHERE j.skills LIKE %:skills%")
     List<Job> findBySkillsLike(@Param("skills") String skills);
 }
