@@ -29,6 +29,12 @@ public class JobController {
         return BaseResponse.success();
     }
 
+    @DeleteMapping("/{jobId}")
+    public BaseResponse<Void> update(@PathVariable("jobId") Long jobId) {
+        jobService.delete(jobId);
+        return BaseResponse.success();
+    }
+
     @GetMapping
     public BaseResponse<List<JobResponse>> getJobList() {
         return BaseResponse.success(jobService.getJobList());

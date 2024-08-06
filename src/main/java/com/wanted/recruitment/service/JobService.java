@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +51,15 @@ public class JobService {
         existingJob.setSkills(request.getSkills());
 
         jobRepository.save(existingJob);
+    }
+
+    @Transactional
+    public void delete(Long jobId) {
+        Job existingJob = jobRepository.findById(jobId).orElseThrow(() -> {
+            throw new RecruitmentApplicationException(ErrorCode.JOB_NOT_FOUND, jobId);
+        });
+
+        jobRepository.delete(existingJob);
     }
 
     @Transactional(readOnly = true)

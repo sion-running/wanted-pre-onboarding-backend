@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Where(clause = "deleted_at is NULL")
-@SQLDelete(sql = "UPDATE #{#entityName} SET deleted_at = NOW() WHERE id = ?")
 @EntityListeners(AuditingEntityListener.class)
 public class Job {
     @Id
@@ -52,9 +51,6 @@ public class Job {
     @LastModifiedDate
     @Column(columnDefinition = "datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '수정일자'")
     private LocalDateTime updatedAt;
-
-    @Column(columnDefinition = "datetime default NULL COMMENT '삭제일자'")
-    private LocalDateTime deletedAt;
 
     @PrePersist
     protected void onCreate() {

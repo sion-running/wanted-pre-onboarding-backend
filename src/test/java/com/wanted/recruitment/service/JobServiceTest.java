@@ -92,4 +92,19 @@ class JobServiceTest {
         Assertions.assertEquals(ErrorCode.INVALID_REQUEST, exception.getErrorCode());
     }
 
+    @Test
+    void 채용공고_삭제시_채용공고가_존재하지_않으면_예외를_발생시킨다() {
+        // given
+        Long requestJobId = 1L;
+
+        // when
+        when(jobRepository.findById(requestJobId)).thenReturn(Optional.empty());
+
+        // then
+        RecruitmentApplicationException exception = assertThrows(RecruitmentApplicationException.class, () ->
+                jobService.delete(requestJobId));
+
+        Assertions.assertEquals(ErrorCode.JOB_NOT_FOUND, exception.getErrorCode());
+    }
+
 }
