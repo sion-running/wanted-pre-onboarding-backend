@@ -12,6 +12,7 @@ import com.wanted.recruitment.repository.CompanyRepository;
 import com.wanted.recruitment.repository.JobRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class JobService {
     private final JobRepository jobRepository;
     private final CompanyRepository companyRepository;
 
+    @Transactional
     public JobResponse create(JobCreateRequest request) {
         Long companyId = request.getCompanyId();
         Company company = companyRepository.findById(companyId).orElseThrow(() -> {
@@ -32,6 +34,7 @@ public class JobService {
         return JobResponse.fromJob(jobRepository.save(job));
     }
 
+    @Transactional
     public void update(JobUpdateRequest request) {
         Job existingJob = jobRepository.findById(request.getJobId()).orElseThrow(() -> {
             throw new RecruitmentApplicationException(ErrorCode.JOB_NOT_FOUND, request.getJobId());
@@ -49,12 +52,12 @@ public class JobService {
         jobRepository.save(existingJob);
     }
 
-
-
+    @Transactional(readOnly = true)
     public List<JobResponse> getJobList() {
         return jobRepository.findAllWithCompany().stream().map(JobResponse::fromJob).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public JobDetailResponse getJobDetail(Long jobId) {
         Job job = jobRepository.findByIdWithCompany(jobId);
         return JobDetailResponse.fromJob(job);
